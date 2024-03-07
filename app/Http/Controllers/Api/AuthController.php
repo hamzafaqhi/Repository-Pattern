@@ -52,11 +52,11 @@ class AuthController extends Controller
         $validated = $request->validated();
         $data = array();
         $error = false;
-        $message = null;
+        $message = 'User Created Successfully';
         try {
             $user = $this->repository->create($validated);
             $data = new User($user);
-            $message = 'User Created Successfully';
+           
         } catch (\Exception $e) {
             $error = true;
             throw $e;

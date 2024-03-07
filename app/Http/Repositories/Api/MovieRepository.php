@@ -35,7 +35,7 @@ class MovieRepository implements MovieInterface
     }
 
     public function delete($id) {
-        return $this->model->delete($id);
+        return $this->model->destroy($id);
     }
 
     public function all($keyword = null,$relations = [],$perPage = 10) {
@@ -60,6 +60,6 @@ class MovieRepository implements MovieInterface
                 'title' => $movieData['title']
             ]);
         }
-        return $this->model->paginate(2);
+        return $this->model->paginate(10);
     }
 }

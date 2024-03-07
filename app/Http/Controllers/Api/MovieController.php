@@ -30,10 +30,8 @@ class MovieController extends Controller
         $message = 'Movies Retrieved Successfully';
         try {
             $title = $request->title ?? null;
-            if ($title) {
-                $data = $this->repository->all($title);
-            } 
-            else {
+            $data = $this->repository->all(isset($title) ?? null);
+            if(count($data) < 1) {
                 $movies = Cache::remember('movies', now()->addHour(), function () {
                     $movieResponse = $this->movieApiRepository->fetchData();
                     if ($movieResponse->successful()) {

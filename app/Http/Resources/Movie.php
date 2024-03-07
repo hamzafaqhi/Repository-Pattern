@@ -22,8 +22,7 @@ class Movie extends JsonResource
             'popularity' => $this->popularity,
             'vote_average' => $this->vote_average,
             'vote_count' => $this->vote_count,
-            'poster_path' => $this->poster_path,
-            'backdrop_path' => $this->backdrop_path,
+            'image' => $this->image,
             'created_at'    => $this->created_at
         ];
     }
