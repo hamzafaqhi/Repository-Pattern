@@ -23,6 +23,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/movies', [MovieController::class, 'index']);
+    Route::post('/movies', [MovieController::class, 'create']);
     Route::get('/movies/{id}', [MovieController::class, 'show']);
     Route::put('/movies/{id}', [MovieController::class, 'update']);
     Route::delete('/movies/{id}', [MovieController::class, 'destroy']);

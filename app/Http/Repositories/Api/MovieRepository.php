@@ -14,13 +14,8 @@ class MovieRepository implements MovieInterface
         $this->model = $movieModel;
     }
     
-    public function create($request) {
-        extract($request);
-        $movie = $this->model->create([
-            'name' => $name,
-            'email' => $email,
-            'password' => bcrypt($password),
-        ]);
+    public function create($data) {
+        $movie = $this->model->create($data);
         return $movie;
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Interfaces\Api\{ExternalApiInterface,MovieInterface};
+use App\Http\Requests\Api\MovieCreate;
 use App\Http\Requests\Api\MovieUpdate;
 use App\Http\Resources\Movie;
 use App\Http\Traits\ResponseTrait;
@@ -66,7 +67,6 @@ class MovieController extends Controller
             $message = $e->getMessage();
         }
         return $this->response(!$error, $data, $message, $error && is_numeric($error) ? $error : null);
-
     }
 
     public function update(MovieUpdate $request, $id)
@@ -97,6 +97,23 @@ class MovieController extends Controller
             $this->repository->delete($id);
         } catch (Exception $e) {
             Log::error($e);
+            $error   = true;
+            $message = $e->getMessage();
+        }
+        return $this->response(!$error, $data, $message, $error && is_numeric($error) ? $error : null);
+    }
+
+    public function create(MovieCreate $request)
+    {   
+        $data    = $request->validated();
+        $error   = false;
+        $message = 'Movies Created successfully.';
+        try {
+            $data = $this->repository->create($data);
+            $data = new Movie($data);
+        } catch (Exception $e) {
+            Log::error($e);
+            dd($e);
             $error   = true;
             $message = $e->getMessage();
         }
