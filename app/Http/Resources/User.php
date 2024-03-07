@@ -21,4 +21,17 @@ class User extends JsonResource
             'token' => $this->createToken(config('app.name'))->plainTextToken,
         ];
     }
+
+    public function with($request)
+    {
+        return [
+            'pagination' => [
+                'total' => $this->collection->total(),
+                'count' => $this->collection->count(),
+                'per_page' => $this->collection->perPage(),
+                'current_page' => $this->collection->currentPage(),
+                'total_pages' => $this->collection->lastPage(),
+            ],
+        ];
+    }
 }

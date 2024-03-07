@@ -58,6 +58,11 @@ return [
     'url' => env('APP_URL', 'http://localhost'),
 
     'asset_url' => env('ASSET_URL'),
+    'movie_url' => env('MOVIE_API_URL'),
+    'movie_timeout' =>env('MOVIE_API_TIMEOUT'),
+    'movie_api_key' => env('MOVIE_API_KEY'),
+    'movie_api_access_token' => env('MOVIE_API_ACCESS_TOKEN'),
+    
 
     /*
     |--------------------------------------------------------------------------
