@@ -1,29 +1,45 @@
-FROM php:8.1.0-fpm
+# Use the official PHP 8.1 image
+FROM php:8.1-fpm
 
-# Install necessary packages
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-        libfreetype6-dev \
-        libjpeg62-turbo-dev \
-        libpng-dev \
-        libonig-dev \
-        libzip-dev \
-        zip \
-    && docker-php-ext-install -j$(nproc) pdo_mysql mbstring exif pcntl bcmath gd zip \
-    && docker-php-ext-configure zip --with-libzip \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    git \
+    curl \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libzip-dev \
+    zip \
+    unzip
 
-# Copy application code
-COPY . /var/www/html
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Change ownership of the application directory
-RUN chown -R www-data:www-data /var/www/html
+# Install PHP extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install gd pdo_mysql zip
 
-# Set the working directory
-WORKDIR /var/www/html
+# Set working directory
+WORKDIR /var/www
 
-# Expose the port
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Copy composer.json and composer.lock
+COPY composer.json composer.lock ./
+
+# Copy existing application directory contents
+COPY . .
+# Install project dependencies
+RUN composer install --no-scripts --no-autoloader
+
+
+
+COPY .env.example ./.env
+
+# Generate optimized autoload files
+RUN composer dump-autoload --optimize
+
+# Expose port 9000 and start php-fpm server
 EXPOSE 9000
-
-# Start the PHP development server
-CMD ["php" "artisan" "serve --port=9000"]
+CMD ["php", "artisan", "serve", "--host", "0.0.0.0", "--port=9000"]
